@@ -1,4 +1,3 @@
-# ton_demo_1
 
 ## Project structure
 

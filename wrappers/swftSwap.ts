@@ -40,8 +40,31 @@ export default class Main implements Contract {
 
   async sendWithdraw(provider: ContractProvider, via: Sender, 
     opts:{
-    value: bigint,
-    amount: bigint
+      value: bigint,
+      amount: bigint,
+      jettonWalletAddress: Address,
+      responseDestination: Address,
+      forwardTonAmount: bigint
+  }) 
+  {
+  await provider.internal(via, {
+      value: opts.value,
+      sendMode: SendMode.PAY_GAS_SEPARATELY,
+      body: beginCell()
+          .storeUint(Opcodes.withdraw, 32)
+          .storeAddress(opts.jettonWalletAddress)
+          .storeAddress(opts.responseDestination)
+          .storeCoins(opts.amount)
+          .storeCoins(opts.forwardTonAmount)
+      .endCell(),
+  });
+  }
+
+  async sendWithdrawTon(provider: ContractProvider, via: Sender, 
+    opts:{
+      value: bigint,
+      amount: bigint,
+      destination: Address,
   }) 
   {
   await provider.internal(via, {
@@ -49,15 +72,54 @@ export default class Main implements Contract {
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell()
           .storeUint(Opcodes.withdrawFunds, 32)
+          .storeAddress(opts.destination)
           .storeCoins(opts.amount)
       .endCell(),
   });
   }
 
-  async transferTo(provider: ContractProvider, via: Sender, 
+  async sendChangeOnwer(provider: ContractProvider, via: Sender, 
+    opts:{
+    value: bigint,
+    newOwnerAddress: Address
+  }) 
+  {
+  await provider.internal(via, {
+      value: opts.value,
+      sendMode: SendMode.PAY_GAS_SEPARATELY,
+      body: beginCell()
+          .storeUint(Opcodes.changeOwner, 32)
+          .storeAddress(opts.newOwnerAddress)
+      .endCell(),
+  });
+  }
+  async sendSwap(provider: ContractProvider, via: Sender, 
     opts:{
     value: bigint,
     amount: bigint,
+    jettonWalletAddress: Address,
+    responseDestination: Address,
+    forwardTonAmount: bigint
+  }) 
+  {
+  await provider.internal(via, {
+      value: opts.value,
+      sendMode: SendMode.PAY_GAS_SEPARATELY,
+      body: beginCell()
+          .storeUint(Opcodes.swap, 32)
+          .storeUint(0, 64)
+          .storeAddress(opts.jettonWalletAddress)
+          .storeAddress(opts.responseDestination)
+          .storeCoins(opts.amount)
+          .storeCoins(opts.forwardTonAmount)
+      .endCell(),
+  });
+  }
+  async sendWithdrawUsdt(provider: ContractProvider, via: Sender, 
+    opts:{
+    value: bigint,
+    amount: bigint,
+    jettonWalletAddress: Address
 
   }) 
   {
@@ -65,7 +127,8 @@ export default class Main implements Contract {
       value: opts.value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell()
-          .storeUint(Opcodes.transferMsgToOwner, 32)
+          .storeUint(Opcodes.swap, 32)
+          .storeAddress(opts.jettonWalletAddress)
           .storeCoins(opts.amount)
       .endCell(),
   });
@@ -78,6 +141,14 @@ export default class Main implements Contract {
   async get_owner(provider: ContractProvider): Promise<Address>  {
     const { stack } = await provider.get("get_owner", []);
     return stack.readAddress();
+  }
+  async get_name(provider: ContractProvider): Promise<String>  {
+    const { stack } = await provider.get("get_name", []);
+    return stack.readString();
+  }
+  async get_symbol(provider: ContractProvider): Promise<String>  {
+    const { stack } = await provider.get("get_symbol", []);
+    return stack.readString();
   }
   async get_seqno(provider: ContractProvider): Promise<number> {
     const { stack } = await provider.get("get_seqno", []);

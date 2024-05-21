@@ -48,7 +48,7 @@ export default class Main implements Contract {
       value: opts.value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell()
-          .storeUint(Opcodes.withdrawFunds, 32)
+          .storeUint(Opcodes.withdraw, 32)
           .storeCoins(opts.amount)
       .endCell(),
   });

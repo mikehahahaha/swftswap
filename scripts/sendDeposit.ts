@@ -2,7 +2,7 @@ import { getHttpEndpoint } from "@orbs-network/ton-access";
 import { mnemonicToWalletKey } from "ton-crypto";
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core"
-import Main from "../wrappers/Main"; // this is the interface class we just implemented
+import Main from "../wrappers/swftSwap"; // this is the interface class we just implemented
 import * as dotenv from 'dotenv';
 dotenv.config(); 
 export async function run() {

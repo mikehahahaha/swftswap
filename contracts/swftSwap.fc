@@ -7,7 +7,8 @@
 global int seqno; ;; Prevnet replay attack
 global int publicKey;
 global slice ownerAddress;
-const int min_ton_for_storage = 1000000000;
+global slice name;
+global slice symbol;
 
 ;; Load storage of thid contract
 () load_data() impure inline_ref {
@@ -17,6 +18,8 @@ const int min_ton_for_storage = 1000000000;
     seqno = ds~load_uint(32);
     publicKey = ds~load_uint(256);
     ownerAddress = ds~load_msg_addr();
+    name = "SWFT Swap1.1";
+    symbol = "SSwap";
 
     ;; Checks if slice is empty. If not, throws an exception.
     ds.end_parse(); 
@@ -50,10 +53,24 @@ int get_seqno() method_id {
     return seqno;
 }
 
+int get_publicKey() method_id {
+    load_data();
+    return publicKey;
+}
+
 slice get_owner() method_id {
     load_data();
     return ownerAddress;
 }
+slice get_name() method_id {
+    load_data();
+    return name;
+}
+slice get_symbol() method_id {
+    load_data();
+    return symbol;
+}
+
 {-
     recv_internal() :
         1. Deposit
@@ -77,26 +94,52 @@ slice get_owner() method_id {
     load_data(); ;; here we populate the storage variables
     slice sender_address = cs~load_msg_addr();
     int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
-    
+    ;; int query_id = in_msg_body~load_uint(64);
+    if(op == swap) {
+        
+        return ();
+    }
+   
+
     ;; Deposit operation: it will send TONs to the owner directly, so we don't have to do anything
     if(op == swapTon) { ;; convert to int by 'c'
         return ();
     }
-
     throw_unless(411, equal_slices(sender_address, ownerAddress)); ;; Only owner can call change_owner() and withdraw()
-
      if (op == withdraw) {
-
-     }
+        slice destination = in_msg_body~load_msg_addr();
+        slice to_destination = in_msg_body~load_msg_addr();
+        int jetton_amount = in_msg_body~load_coins();
+        int forward_ton_amount = in_msg_body~load_coins();
+        slice either_forward_payload = in_msg_body;
+        cell msg = begin_cell()
+            .store_uint(0x18, 6)
+            .store_slice(destination)
+            .store_coins(0)
+            .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .store_ref(begin_cell()
+                .store_uint(op::transfer(), 32)
+                .store_uint(0, 64)
+                .store_coins(jetton_amount)
+                .store_slice(to_destination)
+                .store_slice(sender_address)
+                .store_coins(forward_ton_amount)
+                .store_slice(either_forward_payload)
+                .end_cell())
+            .end_cell();
+         send_raw_message(msg, 64);
+         return ();
+    }
 
     ;; Withdraw Ton coins
     if (op == withdrawTon) {
+        slice destination = in_msg_body~load_msg_addr();
         int withdraw_amount = in_msg_body~load_coins();
         throw_unless(412, get_smc_balance() >=  withdraw_amount); ;; Make sure the smc has enough balance
-        int send_amount = min(withdraw_amount, my_balance - min_ton_for_storage);
+        int send_amount = min(withdraw_amount, my_balance);
         cell msg = begin_cell()
                 .store_uint(0x18, 6) ;; nobounceable - 0x10, logs - 0x30
-                .store_slice(ownerAddress) ;; withdraw to owner
+                .store_slice(destination) ;; withdraw to owner
                 .store_coins(send_amount)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
             .end_cell();
@@ -114,7 +157,6 @@ slice get_owner() method_id {
 
     throw(0xffffff); ;; Op not allowed
 }
-
 {-
     recv_external() :
         1. Selfdestruct

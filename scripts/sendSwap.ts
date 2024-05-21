@@ -2,7 +2,7 @@ import { getHttpEndpoint } from "@orbs-network/ton-access";
 import { mnemonicToWalletKey } from "ton-crypto";
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core"
-import Main from "../wrappers/Main"; // this is the interface class we just implemented
+import Main from "../wrappers/swftSwap"; // this is the interface class we just implemented
 import * as dotenv from 'dotenv';
 dotenv.config(); 
 export async function run() {
@@ -24,7 +24,8 @@ export async function run() {
 
   const walletContract = client.open(wallet);
   const walletSender = walletContract.sender(key.secretKey);
-  // call the getter on chain
-  await counterContract.sendWithdraw(walletSender, {amount: toNano('1'), value: toNano('0.05')});
-  console.log('withdraw success');
+  // call the getter on chain 
+  // await counterContract.sendSwap(walletSender, {value: toNano('0.05'), amount: toNano("900000"), jettonWalletAddress: Address.parse("kQDi_C45cP3AaznjVDZlyhY50TjVnUrGrJHyKuMyyx5Dxzy_"), responseDestination: Address.parse("kQC9hcZC5yNaoqsCV6zJa9O1dtI21HCtazLaexvi-rKNnkPu")});
+  await counterContract.sendSwap(walletSender, {value: toNano('0.05'), amount: toNano("0.01"), jettonWalletAddress: Address.parse("kQDi_C45cP3AaznjVDZlyhY50TjVnUrGrJHyKuMyyx5Dxzy_"), responseDestination: Address.parse("EQBsCeERqn5R5xQg2RV5vUz9lhPv-QCKkCDBXYxAg0LUbcDg"), forwardTonAmount: toNano("0.01")});
+  console.log('sendSwap success');
 }

@@ -50,19 +50,12 @@ contract SwftSwap is ReentrancyGuard, Ownable {
         require(fromToken != address(0), "FROMTOKEN_CANT_T_BE_0");
         require(fromAmount > 0, "FROM_TOKEN_AMOUNT_MUST_BE_MORE_THAN_0");
         uint256 _inputAmount;
-        // 获取当前合约的fromToken 数量
         uint256 _fromTokenBalanceOrigin = IERC20(fromToken).balanceOf(address(this));
-        // 将用户的fromToken代币转入合约地址， fromAmount 数量
         (bool success, bytes memory data) = fromToken.call(abi.encodeWithSelector(0x23b872dd,msg.sender, address(this), fromAmount));
-        // 校验是否转账成功
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');
-        // 获取当前合约的fromToken 数量
         uint256 _fromTokenBalanceNew = IERC20(fromToken).balanceOf(address(this));
-        // 目前金额 - 之前金额 = 用户转入的金额
         _inputAmount = _fromTokenBalanceNew.sub(_fromTokenBalanceOrigin);
-        // 
         require(_inputAmount > 0, "NO_FROM_TOKEN_TRANSFER_TO_THIS_CONTRACT");
-        // 日志
         emit Swap(fromToken, toToken, msg.sender, destination, fromAmount, minReturnAmount);
     }
 

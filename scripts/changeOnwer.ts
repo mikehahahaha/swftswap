@@ -25,10 +25,10 @@ export async function run() {
   const walletContract = client.open(wallet);
   const walletSender = walletContract.sender(key.secretKey);
   // call the getter on chain
-  const balance = await counterContract.get_smc_balance();
-  console.log("balance: ", balance);
-  // await counterContract.sendWithdrawTon(walletSender, {amount: toNano('0.01'), value: toNano('0.05'), destination: Address.parse("0QCCfUmHO1cPCU00Q5q2DPNH0Eur2qcPsfLcmjqYHoxUgQT_")});
-  await counterContract.sendWithdraw(walletSender, {value: toNano('0.05'), amount: toNano("0.001"), jettonWalletAddress: Address.parse("kQDPvZYEUx-AsLRkr5yKryKpr81U5TQ517bbitLDlisVJ1IN"), responseDestination: Address.parse("kQAb6IknKe0JkN-Kc2Z7iYCQRBo5V77-nHcrQa_S7mkEDz55"), forwardTonAmount: toNano("0.001")});
-
-  console.log('withdraw success');
+  const beforeOwner = await counterContract.get_owner();
+  console.log("beforeOwner: " + beforeOwner);
+  await counterContract.sendChangeOnwer(walletSender, {value: toNano("0.05"), newOwnerAddress: Address.parse("EQBN5wT_KJCArIt-9EiJ8ItV1EDF6CUj7BqS_CrTnbmSZjxz")});
+  const afterOwner = await counterContract.get_owner();
+  console.log("afterOwner: " + afterOwner);
+  console.log('changeOwner success');
 }

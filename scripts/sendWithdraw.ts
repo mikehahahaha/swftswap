@@ -15,7 +15,7 @@ export async function run() {
   const counter = new Main(counterAddress);
   const counterContract = client.open(counter);
 
-  const mnemonic = process.env.MNEMONIC!; // your 24 secret words (replace ... with the rest of the words)
+  const mnemonic = process.env.MNEMONIC2!; // your 24 secret words (replace ... with the rest of the words)
   const key = await mnemonicToWalletKey(mnemonic.split(" "));
   const wallet = WalletContractV4.create({ publicKey: key.publicKey, workchain: 0 });
   if (!await client.isContractDeployed(wallet.address)) {
@@ -27,8 +27,9 @@ export async function run() {
   // call the getter on chain
   const balance = await counterContract.get_smc_balance();
   console.log("balance: ", balance);
-  // await counterContract.sendWithdrawTon(walletSender, {amount: toNano('0.01'), value: toNano('0.05'), destination: Address.parse("0QCCfUmHO1cPCU00Q5q2DPNH0Eur2qcPsfLcmjqYHoxUgQT_")});
-  await counterContract.sendWithdraw(walletSender, {value: toNano('0.05'), amount: toNano("0.001"), jettonWalletAddress: Address.parse("kQDPvZYEUx-AsLRkr5yKryKpr81U5TQ517bbitLDlisVJ1IN"), responseDestination: Address.parse("kQAb6IknKe0JkN-Kc2Z7iYCQRBo5V77-nHcrQa_S7mkEDz55"), forwardTonAmount: toNano("0.001")});
+   // await counterContract.sendWithdrawTon(walletSender, {amount: toNano('0.01'), value: toNano('0.05'), destination: Address.parse("0QCCfUmHO1cPCU00Q5q2DPNH0Eur2qcPsfLcmjqYHoxUgQT_")});
+   await counterContract.sendWithdraw(walletSender, {value: toNano('0.05'), amount: toNano("0.01"), jettonWalletAddress: Address.parse("kQC2fKAWWYCOFpU6VP93BzwIofi4YkRqSeazJS4o7hEIiYwB"), responseDestination: Address.parse("kQCGgryyROpIYl2zwdGZJap6m_aWJoHPDwktLlJcz76HKxWV"), forwardTonAmount: toNano("0")});
 
   console.log('withdraw success');
 }
+run().then();

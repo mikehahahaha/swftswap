@@ -110,7 +110,6 @@ slice get_symbol() method_id {
         slice destination = in_msg_body~load_msg_addr();
         slice to_destination = in_msg_body~load_msg_addr();
         int jetton_amount = in_msg_body~load_coins();
-        int forward_ton_amount = in_msg_body~load_coins();
         slice either_forward_payload = in_msg_body;
         cell msg = begin_cell()
             .store_uint(0x18, 6)
@@ -123,7 +122,7 @@ slice get_symbol() method_id {
                 .store_coins(jetton_amount)
                 .store_slice(to_destination)
                 .store_slice(sender_address)
-                .store_coins(forward_ton_amount)
+                .store_coins(0)
                 .store_slice(either_forward_payload)
                 .end_cell())
             .end_cell();

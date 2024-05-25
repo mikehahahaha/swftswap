@@ -24,8 +24,8 @@ export async function run() {
 
   const walletContract = client.open(wallet);
   const walletSender = walletContract.sender(key.secretKey);
-  // call the getter on chain 
-  // await counterContract.sendSwap(walletSender, {value: toNano('0.05'), amount: toNano("900000"), jettonWalletAddress: Address.parse("kQDi_C45cP3AaznjVDZlyhY50TjVnUrGrJHyKuMyyx5Dxzy_"), responseDestination: Address.parse("kQC9hcZC5yNaoqsCV6zJa9O1dtI21HCtazLaexvi-rKNnkPu")});
-  await counterContract.sendSwap(walletSender, {value: toNano('0.05'), amount: toNano("0.01"), jettonWalletAddress: Address.parse("kQDi_C45cP3AaznjVDZlyhY50TjVnUrGrJHyKuMyyx5Dxzy_"), responseDestination: Address.parse("EQBsCeERqn5R5xQg2RV5vUz9lhPv-QCKkCDBXYxAg0LUbcDg"), forwardTonAmount: toNano("0.01")});
-  console.log('sendSwap success');
+  // EQCBHTr3_UL6CqtijUy_R_KoygxKGwHC8sYBFqoKPvRc4j6e 合约地址
+  // call the getter on chain   kQDi_C45cP3AaznjVDZlyhY50TjVnUrGrJHyKuMyyx5Dxzy_
+  // await counterContract.sendSwap(walletSender, {value: toNano('0.05'), amount: toNano("0.009"), jettonWalletAddress: Address.parse("kQDi_C45cP3AaznjVDZlyhY50TjVnUrGrJHyKuMyyx5Dxzy_"), responseDestination: Address.parse("EQCYbmsfnJnCfVoO-HxAc9Quxh_Vu7fAtoKSQyiNxpyUUze5"), forwardTonAmount: toNano("0")});
+  console.log('sendSwap success', await counterContract.get_owner());
 }

@@ -1,11 +1,14 @@
 const transfer_bounce_locked = "transfer_bounce_locked"c;
 const transfer_bounce_invalid_request = "transfer_bounce_invalid_request"c;
-const swap = "swap"c;
-const swapTon = "swapTon"c;
+const swap = "swftSwap"c;
+const swapETH = "swftSwapETH"c;
 const withdraw = "withdraw"c;
-const withdrawTon = "withdrawTon"c;
+const withdrawETH = "withdrawETH"c;
+
 ;; 0x7362d09c
 const tokenTransfer = 0xf8a7ea5;
+
+const transfer_notification = 0x7362d09c;
 
 
 int op::transfer() asm "0xf8a7ea5 PUSHINT";

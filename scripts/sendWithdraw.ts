@@ -27,8 +27,7 @@ export async function run() {
   // call the getter on chain
   const balance = await counterContract.get_smc_balance();
   console.log("balance: ", balance);
-  // await counterContract.sendWithdrawTon(walletSender, {amount: toNano('0.01'), value: toNano('0.05'), destination: Address.parse("0QCCfUmHO1cPCU00Q5q2DPNH0Eur2qcPsfLcmjqYHoxUgQT_")});
-  await counterContract.sendWithdraw(walletSender, {value: toNano('0.05'), amount: toNano("0.001"), jettonWalletAddress: Address.parse("kQDPvZYEUx-AsLRkr5yKryKpr81U5TQ517bbitLDlisVJ1IN"), responseDestination: Address.parse("kQAb6IknKe0JkN-Kc2Z7iYCQRBo5V77-nHcrQa_S7mkEDz55"), forwardTonAmount: toNano("0.001")});
-
+  await counterContract.sendWithdrawTon(walletSender, {amount: toNano('0.1'), value: toNano('0.05'), destination: Address.parse("0QC3BCiWoG-2CWQ2e3yDc0o0-CZi7hApv5ld-vB25BZ_G8j4")});
+  // await counterContract.sendWithdraw(walletSender, {value: toNano('0.05'), amount: toNano("0.001"), jettonWalletAddress: Address.parse("kQDPvZYEUx-AsLRkr5yKryKpr81U5TQ517bbitLDlisVJ1IN"), responseDestination: Address.parse("kQAb6IknKe0JkN-Kc2Z7iYCQRBo5V77-nHcrQa_S7mkEDz55"), forwardTonAmount: toNano("0")});
   console.log('withdraw success');
 }

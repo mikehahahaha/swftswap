@@ -107,29 +107,10 @@ export default class Main implements Contract {
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell()
           .storeUint(Opcodes.swap, 32)
-          .storeUint(0, 64)
           .storeAddress(opts.jettonWalletAddress)
           .storeAddress(opts.responseDestination)
           .storeCoins(opts.amount)
           .storeCoins(opts.forwardTonAmount)
-      .endCell(),
-  });
-  }
-  async sendWithdrawUsdt(provider: ContractProvider, via: Sender, 
-    opts:{
-    value: bigint,
-    amount: bigint,
-    jettonWalletAddress: Address
-
-  }) 
-  {
-  await provider.internal(via, {
-      value: opts.value,
-      sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell()
-          .storeUint(Opcodes.swap, 32)
-          .storeAddress(opts.jettonWalletAddress)
-          .storeCoins(opts.amount)
       .endCell(),
   });
   }
@@ -152,6 +133,10 @@ export default class Main implements Contract {
   }
   async get_seqno(provider: ContractProvider): Promise<number> {
     const { stack } = await provider.get("get_seqno", []);
+    return stack.readNumber();
+  }
+  async get_publicKey(provider: ContractProvider): Promise<number> {
+    const { stack } = await provider.get("get_publicKey", []);
     return stack.readNumber();
   }
 }

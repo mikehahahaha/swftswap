@@ -18,7 +18,7 @@ export async function run() {
   const main = swftSwap.createForDeploy(code, {
     seqno: 0,
     publicKey: key.publicKey,
-    ownerAddress: Address.parse('EQBN5wT_KJCArIt-9EiJ8ItV1EDF6CUj7BqS_CrTnbmSZjxz'),
+    ownerAddress: Address.parse('0QDdDw43q8q-RvuAMGxUjqG4pidSf8P2wPB4e8gmFRTHpbTM'),
   });
 
   // exit if contract is already deployed

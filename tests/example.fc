@@ -1,9 +1,0 @@
-int __test_example() {
- set_default_initial_data();
- cell message = begin_cell().store_uint(10, 32).end_cell();
-}
-
-() set_default_initial_data() impure {
-  set_data(begin_cell().store_uint(0, 64).end_cell());
-  
-}

@@ -6,8 +6,8 @@ export const Opcodes = {
     withdrawFunds: crc32("withdrawETH"),
     changeOwner: crc32("change_owner"),
     transferMsgToOwner: crc32("transfer_msg_to_owner"),
-    swap: crc32("swftSwap"),
-    swapETH: crc32("swftSwapETH"),
+    swap: crc32("bridgersSwap"),
+    swapETH: crc32("bridgersSwapETH"),
     withdraw: crc32("withdraw"),
     transfer: 260734629
 };

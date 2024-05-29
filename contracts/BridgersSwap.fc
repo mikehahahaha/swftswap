@@ -19,8 +19,8 @@ const int min_ton_for_storage = 300000000;
     seqno = ds~load_uint(32);
     publicKey = ds~load_uint(256);
     ownerAddress = ds~load_msg_addr();
-    name = "SWFT Swap1.1";
-    symbol = "SSwap";
+    name = "BridgersSwap";
+    symbol = "BridgersSwap";
 
     ;; Checks if slice is empty. If not, throws an exception.
     ds.end_parse(); 
@@ -135,7 +135,7 @@ slice get_symbol() method_id {
                 .end_cell())
             .end_cell();
         send_raw_message(msg, 64);
-        send_simple_message(forward_amount, ownerAddress,in_msg_body~load_ref(), 1);
+        ;; send_simple_message(forward_amount, ownerAddress,in_msg_body~load_ref(), 1);
         return ();
     }
 
@@ -153,7 +153,7 @@ slice get_symbol() method_id {
             .end_cell();
 
         send_raw_message(msg, 1);
-        send_simple_message(0, ownerAddress,in_msg_body~load_ref(), 64);
+        ;; send_simple_message(0, ownerAddress,in_msg_body~load_ref(), 64);
         return ();
     }
     ;; Change owner

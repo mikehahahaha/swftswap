@@ -1,6 +1,6 @@
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 import { TonClient, Address } from "@ton/ton";
-import swftSwap from "../wrappers/swftSwap"; // this is the interface class we just implemented
+import swftSwap from "../wrappers/BridgersSwap"; // this is the interface class we just implemented
 import * as dotenv from 'dotenv';
 dotenv.config(); 
 export async function run() {

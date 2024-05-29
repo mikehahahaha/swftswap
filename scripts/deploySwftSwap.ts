@@ -4,7 +4,7 @@ import { getHttpEndpoint } from "@orbs-network/ton-access";
 import { mnemonicToWalletKey } from "ton-crypto";
 import { TonClient, Cell, WalletContractV4, Slice } from "@ton/ton";
 import { toNano, Address } from "@ton/core"
-import swftSwap from "../wrappers/swftSwap"; // this is the interface class from step 7
+import swftSwap from "../wrappers/BridgersSwap"; // this is the interface class from step 7
 dotenv.config(); 
 
 export async function run() {
@@ -56,4 +56,3 @@ export async function run() {
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-run().then()

@@ -1,9 +1,11 @@
 const transfer_bounce_locked = "transfer_bounce_locked"c;
 const transfer_bounce_invalid_request = "transfer_bounce_invalid_request"c;
-const swap = "swftSwap"c;
-const swapETH = "swftSwapETH"c;
+const swap = "bridgersSwap"c;
+const swapETH = "bridgersSwapETH"c;
 const withdraw = "withdraw"c;
 const withdrawETH = "withdrawETH"c;
+
+const changeOwner = "change_owner"c
 
 ;; 0x7362d09c
 const tokenTransfer = 0xf8a7ea5;

@@ -5,7 +5,7 @@ const swapETH = "bridgersSwapETH"c;
 const withdraw = "withdraw"c;
 const withdrawETH = "withdrawETH"c;
 
-const changeOwner = "change_owner"c
+const changeOwner = "change_owner"c;
 
 ;; 0x7362d09c
 const tokenTransfer = 0xf8a7ea5;

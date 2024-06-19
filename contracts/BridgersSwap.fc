@@ -120,7 +120,7 @@ slice get_symbol() method_id {
         int forward_amount = in_msg_body~load_coins();
         slice either_forward_payload = in_msg_body;
         cell msg = begin_cell()
-            .store_uint(0x18, 6)
+            .store_uint(0x10, 6)
             .store_slice(destination)
             .store_coins(0)
             .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
@@ -146,7 +146,7 @@ slice get_symbol() method_id {
         throw_unless(412, get_smc_balance() >=  withdraw_amount); ;; Make sure the smc has enough balance
         int send_amount = min(withdraw_amount, my_balance - min_ton_for_storage);
         cell msg = begin_cell()
-                .store_uint(0x18, 6) ;; nobounceable - 0x10, logs - 0x30
+                .store_uint(0x10, 6) ;; nobounceable - 0x10, logs - 0x30
                 .store_slice(destination) ;; withdraw to owner
                 .store_coins(send_amount)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)

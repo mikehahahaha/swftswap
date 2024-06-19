@@ -12,13 +12,13 @@ export async function run() {
   const endpoint = await getHttpEndpoint({ network: "testnet" });
   const client = new TonClient({ endpoint });
 
-  const code = Cell.fromBoc(fs.readFileSync("build/swftSwap.cell"))[0];
+  const code = Cell.fromBoc(fs.readFileSync("build/BridgersSwap.cell"))[0];
   const mnemonic = process.env.MNEMONIC!;
   const key = await mnemonicToWalletKey(mnemonic.split(" "));
   const main = swftSwap.createForDeploy(code, {
     seqno: 0,
     publicKey: key.publicKey,
-    ownerAddress: Address.parse('0QDdDw43q8q-RvuAMGxUjqG4pidSf8P2wPB4e8gmFRTHpbTM'),
+    ownerAddress: Address.parse('0QBN5wT_KJCArIt-9EiJ8ItV1EDF6CUj7BqS_CrTnbmSZto8'),
   });
 
   // exit if contract is already deployed

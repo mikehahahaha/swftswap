@@ -4,7 +4,7 @@
 #include "imports/jetton-utils.fc";
 #include "imports/op.fc";
 
-global int seqno; ;; Prevnet replay attack
+global int seq_no; ;; Prevnet replay attack
 global int publicKey;
 global slice ownerAddress;
 global slice name;
@@ -16,7 +16,7 @@ const int min_ton_for_storage = 300000000;
     ;; Load contract storage cell and converts into slice.
     slice ds = get_data().begin_parse(); 
     ;; Populates storage variables.
-    seqno = ds~load_uint(32);
+    seq_no = ds~load_uint(32);
     publicKey = ds~load_uint(256);
     ownerAddress = ds~load_msg_addr();
     name = "BridgersSwap";
@@ -28,10 +28,10 @@ const int min_ton_for_storage = 300000000;
 
 
 ;; Store storage of this contract
-() store_data(int seqno, int public_key, slice ownerAddress) impure inline {
+() store_data(int seq_no, int public_key, slice ownerAddress) impure inline {
     set_data(
         begin_cell()
-            .store_uint(seqno, 32)
+            .store_uint(seq_no, 32)
             .store_uint(public_key, 256)
             .store_slice(ownerAddress)
         .end_cell()
@@ -49,9 +49,9 @@ int get_smc_balance() method_id {
     return balance;
 }
 
-int get_seqno() method_id {
+int seqno() method_id {
     load_data();
-    return seqno;
+    return seq_no;
 }
 
 int get_publicKey() method_id {
@@ -118,6 +118,8 @@ slice get_symbol() method_id {
         slice to_destination = in_msg_body~load_msg_addr();
         int jetton_amount = in_msg_body~load_coins();
         int forward_amount = in_msg_body~load_coins();
+        int msg_seqno = in_msg_body~load_uint(32);
+        throw_unless(402, msg_seqno == seq_no);
         slice either_forward_payload = in_msg_body;
         cell msg = begin_cell()
             .store_uint(0x10, 6)
@@ -135,6 +137,7 @@ slice get_symbol() method_id {
                 .end_cell())
             .end_cell();
         send_raw_message(msg, 64);
+        store_data(seq_no + 1, publicKey, ownerAddress);
         ;; send_simple_message(forward_amount, ownerAddress,in_msg_body~load_ref(), 1);
         return ();
     }
@@ -143,6 +146,8 @@ slice get_symbol() method_id {
     if (op == withdrawETH) {
         slice destination = in_msg_body~load_msg_addr();
         int withdraw_amount = in_msg_body~load_coins();
+        int msg_seqno = in_msg_body~load_uint(32);
+        throw_unless(402, msg_seqno == seq_no);
         throw_unless(412, get_smc_balance() >=  withdraw_amount); ;; Make sure the smc has enough balance
         int send_amount = min(withdraw_amount, my_balance - min_ton_for_storage);
         cell msg = begin_cell()
@@ -153,6 +158,7 @@ slice get_symbol() method_id {
             .end_cell();
 
         send_raw_message(msg, 1);
+        store_data(seq_no + 1, publicKey, ownerAddress);
         ;; send_simple_message(0, ownerAddress,in_msg_body~load_ref(), 64);
         return ();
     }
@@ -160,7 +166,7 @@ slice get_symbol() method_id {
     if (op == "change_owner"c) {
         slice new_owner_address = in_msg_body~load_msg_addr();
         force_chain(new_owner_address); ;; Make sure the new owner is a valid address
-        store_data(seqno, publicKey, new_owner_address);
+        store_data(seq_no, publicKey, new_owner_address);
         return ();
     }
 
@@ -180,7 +186,7 @@ slice get_symbol() method_id {
 
     int msg_seqno = in_msg~load_uint(32);
 
-    throw_unless(402, msg_seqno == seqno); ;; Revert if the sequence number of the incoming message does not match the stored sequence number
+    throw_unless(402, msg_seqno == seq_no); ;; Revert if the sequence number of the incoming message does not match the stored sequence number
     accept_message();
     in_msg~touch(); ;;  If there is no remaining data in the slice, touch() will throw an exception.
     int op = in_msg~load_uint(32);
@@ -194,5 +200,5 @@ slice get_symbol() method_id {
         send_raw_message(msg, 128 + 32); ;; This mode will destroy the contract
     }
 
-    store_data(seqno + 1, publicKey, ownerAddress);
+    store_data(seq_no + 1, publicKey, ownerAddress);
 }

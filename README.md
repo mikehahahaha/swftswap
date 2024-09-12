@@ -23,3 +23,6 @@
 ### Add a new contract
 
 `npx blueprint create ContractName` or `yarn blueprint create ContractName`
+
+### Build cell
+`npx func-js contracts/BridgersSwap.fc --boc build/BridgersSwap.cell`

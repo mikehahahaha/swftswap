@@ -65,6 +65,7 @@ export default class Main implements Contract {
       value: bigint,
       amount: bigint,
       destination: Address,
+      seqno: bigint,
   }) 
   {
   await provider.internal(via, {
@@ -74,6 +75,7 @@ export default class Main implements Contract {
           .storeUint(Opcodes.withdrawFunds, 32)
           .storeAddress(opts.destination)
           .storeCoins(opts.amount)
+          .storeUint(opts.seqno, 32)
       .endCell(),
   });
   }
@@ -132,7 +134,7 @@ export default class Main implements Contract {
     return stack.readString();
   }
   async get_seqno(provider: ContractProvider): Promise<number> {
-    const { stack } = await provider.get("get_seqno", []);
+    const { stack } = await provider.get("seqno", []);
     return stack.readNumber();
   }
   async get_publicKey(provider: ContractProvider): Promise<number> {

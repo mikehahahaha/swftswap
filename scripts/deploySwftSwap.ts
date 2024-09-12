@@ -22,10 +22,10 @@ export async function run() {
   });
 
   // exit if contract is already deployed
-  // console.log("contract address:", main.address.toString());
-  // if (await client.isContractDeployed(main.address)) {
-  //   return console.log("Counter already deployed");
-  // }
+  console.log("contract address:", main.address.toString());
+  if (await client.isContractDeployed(main.address)) {
+    return console.log("Counter already deployed");
+  }
 
   // open wallet v4 (notice the correct wallet version here)
 
